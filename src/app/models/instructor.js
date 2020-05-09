@@ -2,10 +2,15 @@ const db = require("../../config/db")
 const moment = require("moment");
 module.exports = {
   all(callback) {
-    db.query("SELECT * FROM instructors ORDER BY name", function (err, results) {
-      if (err) throw "Database Error!" + err
-      callback(results.rows)
-    })
+    db.query(`SELECT i.*, COUNT(m) AS total_students
+              FROM instructors i
+              LEFT JOIN members m ON (i.id = m.instructor_id)
+              GROUP BY i.id
+              ORDER BY i.name`,
+      function (err, results) {
+        if (err) throw "Database Error!" + err
+        callback(results.rows)
+      })
   },
   create(data, callback) {
     const query = `
