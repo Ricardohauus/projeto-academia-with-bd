@@ -2,7 +2,7 @@ const db = require("../../config/db")
 const moment = require("moment");
 module.exports = {
   all(callback) {
-    db.query("SELECT * FROM members", function (err, results) {
+    db.query("SELECT * FROM members ORDER BY name", function (err, results) {
       if (err) throw "Database Error!"
       callback(results.rows)
     })
