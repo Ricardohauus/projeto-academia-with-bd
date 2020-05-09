@@ -1,0 +1,70 @@
+{% extends "layout.njk" %}
+
+{% block content %}
+  <form method="POST" {% if instructor.id != null %} action="/instructors?_method=PUT" {% else %} action="/instructors" {% endif %}>
+    <div class="card">
+      <section class="avatar" style="background:url({% if instructor.id != null %} {{instructor.avatar_url}}   {% else %} https://source.unsplash.com/collection/3465564/400x400 {% endif %}) no-repeat center center / cover"></section>
+      <section class="details">
+        {% if instructor.id != null %}
+          <input type="hidden" name="id" value="{{instructor.id}}">
+          <h3>Editar Instrutor</h3>
+        {% else %}
+          <h3>Novo Instrutor</h3>
+        {% endif %}
+        <div class="item">
+          <div>Avatar</div>
+          <div><input type="url" name="avatar_url" placeholder="http://" required="required" value="{{instructor.avatar_url}}"></div>
+        </div>
+
+        <div class="item">
+          <div>Instrutor</div>
+          <div><input type="text" name="name" placeholder="Nome do Instrutor" value="{{instructor.name}}"></div>
+        </div>
+
+        <div class="item">
+          <div>Data de Nascimento </div>
+          <div><input type="date" name="birth" value="{{instructor.birth}}"></div>
+        </div>
+
+        <div class="item">
+          <div>Sexo</div>
+          <div>
+            <span>
+              <input type="radio" name="gender" checked="checked" value="M">
+              Masculino
+            </span>
+            <span>
+              <input type="radio" name="gender" {% if instructor.gender == "F" %} checked="checked" {% endif %} value="F">
+              Feminino
+            </span>
+
+          </div>
+        </div>
+
+        <div class="item">
+          <div>Área de Atuação</div>
+          <div>
+            <input type="text" name="services" value="{{instructor.services}}" placeholder="Separe os serviços prestados por virgula">
+          </div>
+        </div>
+
+        <button type="submit">
+          {% if instructor.id == null %}
+            Salvar
+          {% else %}
+            Editar
+          {% endif %}
+        </button>
+        {% if instructor.id != null %}
+        </form>
+        <form id="form-delete" method="POST" action="/instructors?_method=DELETE">
+          <input type="hidden" name="id" value="{{instructor.id}}">
+          <button type="submit">
+            Deletar
+          </button>
+        </form>
+      {% endif %}
+    </section>
+  </div>
+
+{% endblock %}
