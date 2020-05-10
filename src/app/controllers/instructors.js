@@ -2,8 +2,9 @@ const Instructor = require("../models/Instructor")
 const moment = require("moment");
 module.exports = {
   index(req, res) {
-    Instructor.all(function (instructors) {
-      return res.render("instructors/index", { instructors })
+    const { filter } = req.query
+    Instructor.all(filter, function (instructors) {
+      return res.render("instructors/index", { instructors, filter })
     })
   },
   create(req, res) {

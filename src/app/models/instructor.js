@@ -1,10 +1,13 @@
 const db = require("../../config/db")
 const moment = require("moment");
 module.exports = {
-  all(callback) {
+  all(filter, callback) {
     db.query(`SELECT i.*, COUNT(m) AS total_students
               FROM instructors i
               LEFT JOIN members m ON (i.id = m.instructor_id)
+              where (i.name ILIKE '%${filter != null ? filter : ""}%'
+              OR i.services ILIKE '%${filter != null ? filter : ""}%'
+              )
               GROUP BY i.id
               ORDER BY total_students desc, i.name asc`,
       function (err, results) {
