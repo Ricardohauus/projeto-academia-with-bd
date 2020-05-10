@@ -72,6 +72,18 @@
           <div><input type="number"   name="height" value="{{member.height}}"></div>
         </div>
 
+        <div class="item">
+          <div>Instrutor</div>
+
+          <select name="instructor_id" >
+            {% for instructor in instructors %}
+              <option value="{{instructor.id}}" {% if member.instrutor_id == instructor.id %} selected {% endif %} >
+                {{instructor.name}}
+              </ option>
+            {% endfor %}
+          </select>
+        </div>
+
         <button type="submit">
           {% if member.id == null %}
             Salvar

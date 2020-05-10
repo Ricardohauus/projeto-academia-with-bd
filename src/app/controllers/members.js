@@ -1,4 +1,4 @@
-const Member = require("../models/member")
+const Member = require("../models/Member")
 const moment = require("moment");
 module.exports = {
   index(req, res) {
@@ -7,7 +7,10 @@ module.exports = {
     })
   },
   create(req, res) {
-    return res.render("members/create")
+    Member.allInstructors(function (instructors) {
+      return res.render("members/create", { instructors })
+    })
+
   },
   saveOrUpdate(req, res) {
 
@@ -42,9 +45,14 @@ module.exports = {
   },
   edit(req, res) {
     const { id } = req.params
+    let instructors;
+
     Member.find(id, function (member) {
       member.birth = moment(member.birth).add(1, "d").format('YYYY-MM-DD')
-      return member != null ? res.render("members/create", { member }) : res.send("Não encontrou");
+      Member.allInstructors(function (instructors) {
+        return member != null ? res.render("members/create", { member, instructors }) : res.send("Não encontrou");
+      })
+
     })
   },
   delete(req, res) {

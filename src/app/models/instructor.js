@@ -6,7 +6,7 @@ module.exports = {
               FROM instructors i
               LEFT JOIN members m ON (i.id = m.instructor_id)
               GROUP BY i.id
-              ORDER BY i.name`,
+              ORDER BY total_students desc, i.name asc`,
       function (err, results) {
         if (err) throw "Database Error!" + err
         callback(results.rows)
@@ -62,7 +62,6 @@ module.exports = {
   `;
     db.query(query, function (err, results) {
       if (err) throw "Database Error!" + err
-      console.log(results);
     })
   },
 
