@@ -2,8 +2,15 @@ const Instructor = require("../models/Instructor")
 const moment = require("moment");
 module.exports = {
   index(req, res) {
-    const { filter } = req.query
-    Instructor.all(filter, function (instructors) {
+    let { filter, page, limit } = req.query
+    page = page == null ? 1 : page;
+    limit = limit == null ? 5 : limit;
+    let offset = limit * (page - 1)
+    const params = {
+      filter, limit, offset
+    }
+
+    Instructor.all(params, function (instructors) {
       return res.render("instructors/index", { instructors, filter })
     })
   },
