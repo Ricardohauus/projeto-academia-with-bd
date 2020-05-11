@@ -12,7 +12,7 @@ module.exports = {
     }
     Member.all(params, function (members) {
       const pagination = {
-        filter, total: Math.ceil(members.length / limit), page
+        filter, total: Math.ceil(members[0].totalregister / limit), page
       }
       return res.render("members/index", { members, filter, pagination })
     })

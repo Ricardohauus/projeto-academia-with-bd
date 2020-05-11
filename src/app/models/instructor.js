@@ -3,16 +3,20 @@ const moment = require("moment");
 module.exports = {
   all(params, callback) {
     const { filter, limit, offset } = params;
-    db.query(`SELECT i.*, COUNT(m) AS total_students
+    const queryFilter = `where (i.name ILIKE '%${params.filter != null ? filter : ""}%'
+                   OR i.services ILIKE '%${filter != null ? filter : ""}%')`
+
+    db.query(`SELECT i.*, COUNT(m) AS total_students,
+              (SELECT count(*) FROM instructors i
+              ${queryFilter}) as totalRegister
               FROM instructors i
               LEFT JOIN members m ON (i.id = m.instructor_id)
-              where (i.name ILIKE '%${params.filter != null ? filter : ""}%'
-              OR i.services ILIKE '%${filter != null ? filter : ""}%'
-              )
+              ${queryFilter}
               GROUP BY i.id
               ORDER BY total_students desc, i.name asc
               LIMIT ${limit} OFFSET ${offset}
               `,
+
       function (err, results) {
         if (err) throw "Database Error!" + err
         callback(results.rows)

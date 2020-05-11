@@ -1,5 +1,6 @@
 const currentPageIndex = location.pathname;
 const menuItems = document.querySelectorAll("header .links a")
+const pagination = document.querySelector(".pagination");
 
 for (menuItem of menuItems) {
   if (currentPageIndex.includes(menuItem.getAttribute("href"))) {
@@ -32,29 +33,32 @@ function paginate(selectedPage, totalPages) {
   return pages;
 }
 
-const pagination = document.querySelector(".pagination");
-const page = +pagination.dataset.page
-const total = +pagination.dataset.total
-const filter = pagination.dataset.filter
+function createPagination(selectedPage, totalPages) {
+  const page = +pagination.dataset.page,
+    total = +pagination.dataset.total,
+    filter = pagination.dataset.filter,
+    pages = paginate(page, total);
 
+  let elements = ""
 
-const pages = paginate(page, total);
-
-let elements = ""
-
-for (let page of pages) {
-  if (String(page).includes("...")) {
-    elements += `<span>${page}</span>`
-  } else {
-    if (filter) {
-      elements += `<a href="?page=${page}&filter=${filter}">${page}</a>`
+  for (let page of pages) {
+    if (String(page).includes("...")) {
+      elements += `<span>${page}</span>`
     } else {
-      elements += `<a href="?page=${page}">${page}</a>`
+      if (filter) {
+        elements += `<a href="?page=${page}&filter=${filter}">${page}</a>`
+      } else {
+        elements += `<a href="?page=${page}">${page}</a>`
+      }
     }
   }
+
+  pagination.innerHTML = elements
 }
 
-pagination.innerHTML = elements
+if (pagination) {
+  createPagination(pagination)
+}
 
-console.log(filter);
+
 

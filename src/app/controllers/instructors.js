@@ -13,9 +13,8 @@ module.exports = {
 
     Instructor.all(params, function (instructors) {
       const pagination = {
-        filter, total: Math.ceil(instructors.length / limit), page
+        filter, total: Math.ceil(instructors[0].totalregister / limit), page
       }
-
       return res.render("instructors/index", { instructors, filter, pagination })
     })
   },

@@ -3,12 +3,13 @@ const moment = require("moment");
 module.exports = {
   all(params, callback) {
     const { filter, limit, offset } = params;
-    db.query(`SELECT m.* FROM members m
-              where (m.name ILIKE '%${params.filter != null ? filter : ""}%')              
+    const queryFilter = `where (m.name ILIKE '%${params.filter != null ? filter : ""}%')`
+    db.query(`SELECT m.*,(select count(*) from members m ${queryFilter}) as totalregister FROM members m
+              ${queryFilter}             
               ORDER BY m.name 
               LIMIT ${limit} OFFSET ${offset}
               `, function (err, results) {
-      if (err) throw "Database Error!"
+      if (err) throw "Database Error!" + err
       callback(results.rows)
     })
   },
