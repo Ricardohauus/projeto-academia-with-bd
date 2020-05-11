@@ -1,8 +1,13 @@
 const db = require("../../config/db")
 const moment = require("moment");
 module.exports = {
-  all(callback) {
-    db.query("SELECT * FROM members ORDER BY name", function (err, results) {
+  all(params, callback) {
+    const { filter, limit, offset } = params;
+    db.query(`SELECT m.* FROM members m
+              where (m.name ILIKE '%${params.filter != null ? filter : ""}%')              
+              ORDER BY m.name 
+              LIMIT ${limit} OFFSET ${offset}
+              `, function (err, results) {
       if (err) throw "Database Error!"
       callback(results.rows)
     })

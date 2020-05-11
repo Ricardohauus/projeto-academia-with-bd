@@ -2,8 +2,19 @@ const Member = require("../models/Member")
 const moment = require("moment");
 module.exports = {
   index(req, res) {
-    Member.all(function (members) {
-      return res.render("members/index", { members })
+    let { filter, page, limit } = req.query
+    page = page == null ? 1 : page;
+    limit = limit == null ? 5 : limit;
+    let offset = limit * (page - 1)
+
+    const params = {
+      filter, limit, offset
+    }
+    Member.all(params, function (members) {
+      const pagination = {
+        filter, total: Math.ceil(members.length / limit), page
+      }
+      return res.render("members/index", { members, filter, pagination })
     })
   },
   create(req, res) {
