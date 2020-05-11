@@ -6,12 +6,17 @@ module.exports = {
     page = page == null ? 1 : page;
     limit = limit == null ? 5 : limit;
     let offset = limit * (page - 1)
+
     const params = {
       filter, limit, offset
     }
 
     Instructor.all(params, function (instructors) {
-      return res.render("instructors/index", { instructors, filter })
+      const pagination = {
+        filter, total: Math.ceil(instructors.length / limit), page
+      }
+
+      return res.render("instructors/index", { instructors, filter, pagination })
     })
   },
   create(req, res) {
