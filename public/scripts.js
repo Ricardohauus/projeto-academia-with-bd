@@ -33,11 +33,11 @@ function paginate(selectedPage, totalPages) {
   return pages;
 }
 
-function createPagination(selectedPage, totalPages) {
-  const page = +pagination.dataset.page,
+function createPagination(pagination) {
+  const currentPage = +pagination.dataset.page,
     total = +pagination.dataset.total,
     filter = pagination.dataset.filter,
-    pages = paginate(page, total);
+    pages = paginate(currentPage, total);
 
   let elements = ""
 
@@ -46,10 +46,11 @@ function createPagination(selectedPage, totalPages) {
       elements += `<span>${page}</span>`
     } else {
       if (filter) {
-        elements += `<a href="?page=${page}&filter=${filter}">${page}</a>`
+        elements += `<a ${!(page == currentPage) ? `href="?page=${page}&filter=${filter}"` : ''}" >${page}</a>`
       } else {
-        elements += `<a href="?page=${page}">${page}</a>`
+        elements += `<a ${!(page == currentPage) ? `href="?page=${page}"` : ''}">${page}</a>`
       }
+
     }
   }
 

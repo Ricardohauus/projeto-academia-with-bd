@@ -11,10 +11,12 @@ module.exports = {
       filter, limit, offset
     }
 
+
     Instructor.all(params, function (instructors) {
       const pagination = {
-        filter, total: Math.ceil(instructors.length > 0 ? instructors[0].totalregister : 0 / limit), page
+        filter, total: Math.ceil((instructors.length > 0 ? instructors[0].totalregister : 0) / limit), page
       }
+      console.log(" Filter " + filter, "\n Limit " + limit, "\n Offset " + offset, "\n Page " + page, "\n Total " + pagination.total);
       return res.render("instructors/index", { instructors, filter, pagination })
     })
   },
